@@ -17,8 +17,10 @@ class Admin_m extends CI_Model
     public function rekap_barang_masuk($id_barang)
     {
 
-        $this->db->join('data_barang', 'stok_masuk.id_barang = data_barang.id_barang');
+        $this->db->where('id_barang', $id_barang);
+
         $this->db->from('stok_masuk');
+        $this->db->join('data_barang', 'stok_masuk.barang = data_barang.id_barang');
         $query = $this->db->get();
         return $query->result();
     }

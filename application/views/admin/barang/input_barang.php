@@ -33,6 +33,10 @@
                                                                     <td><input type="text" name="lokasi" class="form-control" required placeholder="Lokasi Barang"></td>
                                                                 </tr>
                                                                 <tr>
+                                                                    <td width=20%>Harga Satuan</td>
+                                                                    <td><input type="text" name="harga" class="form-control" required placeholder="Harga Barang"></td>
+                                                                </tr>
+                                                                <tr>
                                                                     <td>
                                                                         <button class="btn btn-success">Simpan</button>
                                                                     </td>

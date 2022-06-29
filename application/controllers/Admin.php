@@ -39,6 +39,16 @@ class Admin extends CI_Controller
         $this->load->view('admin/barang/data_barang', $data);
         $this->load->view('template/footer');
     }
+    public function cetak_data_baut()
+    {
+        $data['judul'] = 'Data Baut';
+        $data['nama'] = $this->session->userdata('nama');
+
+        $data['data'] = $this->admin_m->data_baut();
+        // $this->load->view('template/header', $data);
+        $this->load->view('admin/barang/data_barang_cetak', $data);
+        // $this->load->view('template/footer');
+    }
     public function data_barang_masuk()
     {
         $data['judul'] = 'Admin';
@@ -95,6 +105,7 @@ class Admin extends CI_Controller
             'nama_barang' => $this->input->post('nama_barang'),
             'jumlah_stok' => $this->input->post('jumlah_stok'),
             'lokasi' => $this->input->post('lokasi'),
+            'harga' => $this->input->post('harga'),
 
 
         );
@@ -109,7 +120,7 @@ class Admin extends CI_Controller
 
         $hasil = $stok_awal + $stok_masuk;
         $data = array(
-            'id_barang' => $id_barang,
+            'barang' => $id_barang,
             'stok_masuk' => $stok_masuk,
             'date' => $this->input->post('date'),
 
@@ -124,11 +135,13 @@ class Admin extends CI_Controller
         $this->db->insert('stok_masuk', $data);
         return redirect('admin/data_baut');
     }
-    public function hapus_akun($id_akun)
+    public function hapus_barang($id_barang)
     {
-        $this->db->where('id_akun', $id_akun);
-        $this->db->delete('akun');
-        return redirect('admin/data_pengguna');
+        $this->db->where('id_barang', $id_barang);
+        $this->db->delete('data_barang');
+        $this->db->where('barang', $id_barang);
+        $this->db->delete('stok_masuk');
+        return redirect('admin/data_baut');
     }
 }
 

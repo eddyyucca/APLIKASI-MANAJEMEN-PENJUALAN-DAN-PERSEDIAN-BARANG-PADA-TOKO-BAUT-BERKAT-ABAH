@@ -2,16 +2,12 @@
     <!-- Page Heading -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold ">Data Baut</h6>
+            <h1 class="m-0 font-weight-bold ">Data Baut</h1>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="container">
-                    <a href="<?= base_url('admin/tambah_item') ?>" class="btn btn-primary">Tambah Item</a>
-                    <a href="<?= base_url('admin/cetak_data_baut') ?>" class="btn btn-primary">Cetak PDF</a>
-                    <hr>
-                </div>
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" border="1">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -19,7 +15,7 @@
                             <th>Harga</th>
                             <th>Stok</th>
                             <th>Lokasi</th>
-                            <th>aksi</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -32,11 +28,7 @@
                                 <td><?= $x->harga; ?></td>
                                 <td><?= $x->jumlah_stok; ?></td>
                                 <td><?= $x->lokasi; ?></td>
-                                <td align="center">
-                                    <a href="<?= base_url('admin/hapus_barang/') . $x->id_barang; ?>" onclick="return confirm('Yakin Hapus?')" class="btn btn-danger">Hapus</a>
-                                    <a href="<?= base_url('admin/edit_akun/') . $x->id_barang; ?>" class="btn btn-primary">Edit</a>
-                                    <a href="<?= base_url('admin/rekap_barang_masuk_item/') . $x->id_barang; ?>" class="btn btn-primary">Rekap Barang Masuk</a>
-                                </td>
+
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -45,3 +37,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.print()
+</script>

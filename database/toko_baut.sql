@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 17, 2022 at 11:55 PM
+-- Generation Time: Jun 29, 2022 at 08:27 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -31,17 +31,20 @@ CREATE TABLE `data_barang` (
   `id_barang` int(11) NOT NULL,
   `nama_barang` varchar(50) NOT NULL,
   `jumlah_stok` varchar(100) NOT NULL,
-  `lokasi` varchar(20) NOT NULL
+  `lokasi` varchar(20) NOT NULL,
+  `harga` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `data_barang`
 --
 
-INSERT INTO `data_barang` (`id_barang`, `nama_barang`, `jumlah_stok`, `lokasi`) VALUES
-(1, 'baut 17 x 50 mm', '40', '101A0101'),
-(2, 'baut k14 x 40 mm', '100', '101A102'),
-(3, 'tes', '1', '101b01012');
+INSERT INTO `data_barang` (`id_barang`, `nama_barang`, `jumlah_stok`, `lokasi`, `harga`) VALUES
+(2, 'baut k14 x 40 mm', '100', '101A102', ''),
+(3, 'tes', '1', '101b01012', ''),
+(4, 'baut k 19 x 50 mm', '190', '104b101', ''),
+(5, 'Baut 12 x 40 mm', '10100', '101B0204', ''),
+(6, 'tiptop', '10', '1000111', '1000000');
 
 -- --------------------------------------------------------
 
@@ -51,7 +54,7 @@ INSERT INTO `data_barang` (`id_barang`, `nama_barang`, `jumlah_stok`, `lokasi`) 
 
 CREATE TABLE `stok_masuk` (
   `id_stok_masuk` int(11) NOT NULL,
-  `id_barang` varchar(11) NOT NULL,
+  `barang` varchar(11) NOT NULL,
   `stok_masuk` varchar(255) NOT NULL,
   `date` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -60,9 +63,9 @@ CREATE TABLE `stok_masuk` (
 -- Dumping data for table `stok_masuk`
 --
 
-INSERT INTO `stok_masuk` (`id_stok_masuk`, `id_barang`, `stok_masuk`, `date`) VALUES
-(1, '1', '2', '2022-06-18'),
-(2, '1', '8', '2022-06-20');
+INSERT INTO `stok_masuk` (`id_stok_masuk`, `barang`, `stok_masuk`, `date`) VALUES
+(3, '4', '90', '2022-06-18'),
+(4, '5', '100', '2022-06-18');
 
 --
 -- Indexes for dumped tables
@@ -88,13 +91,13 @@ ALTER TABLE `stok_masuk`
 -- AUTO_INCREMENT for table `data_barang`
 --
 ALTER TABLE `data_barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `stok_masuk`
 --
 ALTER TABLE `stok_masuk`
-  MODIFY `id_stok_masuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_stok_masuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

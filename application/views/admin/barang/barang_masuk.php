@@ -11,6 +11,7 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Harga</th>
                             <th>Stok</th>
                             <th>Lokasi</th>
                             <th>aksi</th>
@@ -23,6 +24,7 @@
                             <tr>
                                 <td><?= $nomor++; ?></td>
                                 <td><?= $x->nama_barang; ?></td>
+                                <td><?= $x->harga; ?></td>
                                 <td><?= $x->jumlah_stok; ?></td>
                                 <td><?= $x->lokasi; ?></td>
                                 <td align="center">
