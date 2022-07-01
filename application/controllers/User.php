@@ -13,10 +13,10 @@ class User extends CI_Controller
         $this->load->model('admin_m');
         // $this->load->model('alumni_m');
 
-        $level_akun = $this->session->userdata('level');
-        if ($level_akun != "user") {
-            return redirect('auth');
-        }
+        // $level_akun = $this->session->userdata('level');
+        // if ($level_akun != "user") {
+        //     return redirect('auth');
+        // }
     }
 
     public function index()
@@ -24,60 +24,6 @@ class User extends CI_Controller
         $data['nama'] = $this->session->userdata('nama');
 
         $data['judul'] = 'Dashboard';
-        $bulan1 = '01';
-        $bulan2 = '02';
-        $bulan3 = '03';
-        $bulan4 = '04';
-        $bulan5 = '05';
-        $bulan6 = '06';
-        $bulan7 = '07';
-        $bulan8 = '08';
-        $bulan9 = '09';
-        $bulan10 = '10';
-        $bulan11 = '11';
-        $bulan12 = '12';
-
-        $data['bulan1'] = $this->admin_m->surat_masuk_st($bulan1);
-        $data['bulan2'] = $this->admin_m->surat_masuk_st($bulan2);
-        $data['bulan3'] = $this->admin_m->surat_masuk_st($bulan3);
-        $data['bulan4'] = $this->admin_m->surat_masuk_st($bulan4);
-        $data['bulan5'] = $this->admin_m->surat_masuk_st($bulan5);
-        $data['bulan6'] = $this->admin_m->surat_masuk_st($bulan6);
-        $data['bulan7'] = $this->admin_m->surat_masuk_st($bulan7);
-        $data['bulan8'] = $this->admin_m->surat_masuk_st($bulan8);
-        $data['bulan9'] = $this->admin_m->surat_masuk_st($bulan9);
-        $data['bulan10'] = $this->admin_m->surat_masuk_st($bulan10);
-        $data['bulan11'] = $this->admin_m->surat_masuk_st($bulan11);
-        $data['bulan12'] = $this->admin_m->surat_masuk_st($bulan12);
-
-        $data['all_bulan'] = $this->admin_m->surat_masuk_all();
-
-        $bulan1 = '01';
-        $bulan2 = '02';
-        $bulan3 = '03';
-        $bulan4 = '04';
-        $bulan5 = '05';
-        $bulan6 = '06';
-        $bulan7 = '07';
-        $bulan8 = '08';
-        $bulan9 = '09';
-        $bulan10 = '10';
-        $bulan11 = '11';
-        $bulan12 = '12';
-
-        $data['kbulan1'] = $this->admin_m->surat_keluar_st($bulan1);
-        $data['kbulan2'] = $this->admin_m->surat_keluar_st($bulan2);
-        $data['kbulan3'] = $this->admin_m->surat_keluar_st($bulan3);
-        $data['kbulan4'] = $this->admin_m->surat_keluar_st($bulan4);
-        $data['kbulan5'] = $this->admin_m->surat_keluar_st($bulan5);
-        $data['kbulan6'] = $this->admin_m->surat_keluar_st($bulan6);
-        $data['kbulan7'] = $this->admin_m->surat_keluar_st($bulan7);
-        $data['kbulan8'] = $this->admin_m->surat_keluar_st($bulan8);
-        $data['kbulan9'] = $this->admin_m->surat_keluar_st($bulan9);
-        $data['kbulan10'] = $this->admin_m->surat_keluar_st($bulan10);
-        $data['kbulan11'] = $this->admin_m->surat_keluar_st($bulan11);
-        $data['kbulan12'] = $this->admin_m->surat_keluar_st($bulan12);
-        $data['kall_bulan'] = $this->admin_m->surat_keluar_all();
 
         $this->load->view('template_user/header', $data);
         $this->load->view('user/index', $data);

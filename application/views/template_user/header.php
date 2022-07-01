@@ -38,9 +38,9 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('admin') ?>">
           <div class="sidebar-brand-icon">
-            <img src="<?= base_url('assets/logo666.png'); ?>" width="50" height="60" alt="Logo">
+            <img src="<?= base_url('assets/logo.png'); ?>" width="50" height="60" alt="Logo">
           </div>
-          <div class="sidebar-brand-text mx-3">E-Surat</div>
+          <div class="sidebar-brand-text mx-3">Toko Baut</div>
         </a>
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
@@ -58,15 +58,12 @@
         <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-database"></i>
-            <span>Data Surat & Laporan</span>
+            <span>Laporan Pembelian</span>
           </a>
           <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="<?= base_url('user/surat_masuk') ?>">Surat Masuk</a>
-              <a class="collapse-item" href="<?= base_url('user/surat_keluar') ?>">Surat Keluar</a>
-              <a class="collapse-item" href="<?= base_url('user/disposisi') ?>">Disposisi</a>
-              <a class="collapse-item" href="<?= base_url('user/agenda') ?>">Agenda</a>
-              <a class="collapse-item" href="<?= base_url('user/surat_izin') ?>">Surat Izin</a>
+              <a class="collapse-item" href="<?= base_url('user/pembelian') ?>">Pembelian</a>
+
             </div>
           </div>
         </li>

@@ -38,7 +38,8 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('admin') ?>">
           <div class="sidebar-brand-icon">
-            <img src="<?= base_url('hapus_barang'); ?>" width="50" height="60" alt="Logo">
+            <img src="<?= base_url('assets/logo.png'); ?>" width="50" height="60" alt="Logo">
+
           </div>
           <div class="sidebar-brand-text mx-3">Barkat Abah</div>
         </a>

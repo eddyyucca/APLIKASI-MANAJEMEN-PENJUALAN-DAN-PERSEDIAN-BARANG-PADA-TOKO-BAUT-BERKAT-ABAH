@@ -23,7 +23,7 @@
                                         echo $this->session->flashdata('pesan')
                                         ?>
                                         <?= validation_errors() ?>
-                                        <form class="user" action="<?= base_url('auth/auth') ?>" method="POST">
+                                        <form class="user" action="<?= base_url('auth/login') ?>" method="POST">
                                             <div class="form-group mb-4">
                                                 <div class="form-group mb-4">
                                                     <input type="text" class="form-control" name="username" placeholder="Username">
@@ -38,7 +38,7 @@
                                             </button>
                                             <div class="d-flex justify-content-center mb-4 mt-3">
                                                 <small>
-
+                                                    <a href="<?= base_url('auth/daftar_akun') ?>" class="btn btn-dark"> Daftar Pengguna</a>
                                             </div>
                                             </small>
                                         </form>

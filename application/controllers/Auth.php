@@ -30,7 +30,7 @@ class Auth extends CI_Controller
         $this->load->view('auth/template_auth/footer', $data);
     }
 
-    public function auth()
+    public function login()
     {
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
@@ -153,6 +153,59 @@ class Auth extends CI_Controller
             $this->db->insert('warga', $data);
             $this->db->insert('akun', $akun);
             return redirect('auth/daftar');
+        }
+    }
+
+    public function daftar_akun()
+    {
+        $this->form_validation->set_rules('telpon', 'Telpon', 'required|is_unique[akun.telpon]');
+        $this->form_validation->set_rules('email', 'Email', 'required|is_unique[akun.email]');
+        $this->form_validation->set_rules('username', 'Username', 'required|is_unique[akun.username]');
+        if ($this->form_validation->run() == FALSE) {
+            $data['judul'] = 'Daftar';
+            // $data['nama'] = $this->session->userdata('nama_alumni');
+
+
+            $this->load->view('auth/template_auth/header', $data);
+            $this->load->view('auth/daftar', $data);
+            $this->load->view('auth/template_auth/footer');
+        } else {
+
+            $userkey = 'f70595dcb94f';
+            $passkey = 'da5d1066b8f2e8343646fb16';
+            $telepon = $this->input->post('telpon');
+            $message = 'Akun anda sudah aktif,silahkan login ' . $this->input->post('nama');
+            $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curlHandle, CURLOPT_POST, 1);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                'userkey' => $userkey,
+                'passkey' => $passkey,
+                'to' => $telepon,
+                'message' => $message
+            ));
+            $results = json_decode(curl_exec($curlHandle), true);
+            curl_close($curlHandle);
+
+            $data = array(
+                'username' => $this->input->post('username'),
+                'nama' => $this->input->post('nama'),
+                'email' => $this->input->post('email'),
+                'telpon' => $this->input->post('telpon'),
+                'alamat' => $this->input->post('alamat'),
+                'password' => md5($this->input->post('password')),
+                'level' => 'user',
+            );
+
+
+            $this->db->insert('akun', $data);
+            return redirect('auth/index');
         }
     }
 }
