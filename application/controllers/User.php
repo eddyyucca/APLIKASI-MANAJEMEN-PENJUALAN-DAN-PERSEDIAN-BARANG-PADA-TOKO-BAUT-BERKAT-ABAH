@@ -8,10 +8,10 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
-        // $this->load->model('jabatan_m');
-        // $this->load->model('lowongan_m');
+        $this->load->library('pagination');
+        $this->load->library('cart');
         $this->load->model('admin_m');
-        // $this->load->model('alumni_m');
+        $this->load->model('user_m');
 
         // $level_akun = $this->session->userdata('level');
         // if ($level_akun != "user") {
@@ -21,14 +21,67 @@ class User extends CI_Controller
 
     public function index()
     {
+        //page
+        $config['base_url'] = site_url('user/index'); //site url
+        $config['total_rows'] = $this->db->count_all('data_barang'); //total row
+        $config['per_page'] = 3;  //show record per halaman
+        $config["uri_segment"] = 3;  // uri parameter
+        $choice = $config["total_rows"] / $config["per_page"];
+        $config["num_links"] = floor($choice);
+
+        // Membuat Style pagination untuk BootStrap v4
+        $config['first_link']       = 'First';
+        $config['last_link']        = 'Last';
+        $config['next_link']        = 'Next';
+        $config['prev_link']        = 'Prev';
+        $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+
+        $this->pagination->initialize($config);
+        $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data['data'] = $this->user_m->penomoran($config["per_page"], $data['page']);
+
+        $data['pagination'] = $this->pagination->create_links();
+
+
+        //end
+
+
+        $data['judul'] = 'Tabel Data ATK';
+        $data['databarang'] = $this->user_m->get_barang();
+        $data['keranjang'] = $this->cart->contents();
         $data['nama'] = $this->session->userdata('nama');
-
-        $data['judul'] = 'Dashboard';
-
         $this->load->view('template_user/header', $data);
         $this->load->view('user/index', $data);
         $this->load->view('template_user/footer', $data);
     }
+
+    public function cari()
+    {
+        $cari = $this->input->post('cari');
+
+        $data['judul'] = 'Order Baut';
+        $data['databarang'] = $this->user_m->cari($cari);
+        $data['keranjang'] = $this->cart->contents();
+        $data['nama'] = $this->session->userdata('nama');
+        $this->load->view('template_user/header', $data);
+        $this->load->view('user/cari', $data);
+        $this->load->view('template_user/footer');
+    }
+
     public function data_pengguna()
     {
         $data['judul'] = 'User';
@@ -39,16 +92,7 @@ class User extends CI_Controller
         $this->load->view('user/akun/data_akun', $data);
         $this->load->view('template_user/footer');
     }
-    public function tambah_akun()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
 
-        $data['data'] = $this->admin_m->get_all_akun();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/akun/input_akun', $data);
-        $this->load->view('template_user/footer');
-    }
     public function edit_akun($id_akun)
     {
         $data['judul'] = 'User';
@@ -74,18 +118,59 @@ class User extends CI_Controller
         $this->db->insert('akun', $data);
         return redirect('user/data_pengguna');
     }
-    public function hapus_akun($id_akun)
+
+    public function insert()
     {
-        $this->db->where('id_akun', $id_akun);
-        $this->db->delete('akun');
-        return redirect('user/data_pengguna');
+        $userkey = 'f70595dcb94f';
+        $passkey = 'da5d1066b8f2e8343646fb16';
+        $telepon = '081250653005';
+        $message = 'Ada order baru, silahkan cek dan lakukan proses order';
+        $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curlHandle, CURLOPT_POST, 1);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+            'userkey' => $userkey,
+            'passkey' => $passkey,
+            'to' => $telepon,
+            'message' => $message
+        ));
+        $results = json_decode(curl_exec($curlHandle), true);
+        curl_close($curlHandle);
+
+        $x = $this->db->get('data_order')->result();
+        $id_x = count($x) + 1;
+        $cart = $this->cart->contents();
+        foreach ($cart as $item) {
+            $data = array(
+                'id_order' => '',
+                'id_keranjang' => $id_x,
+                'id_barang' => $item['id'],
+                'qty_order' => $item['qty'],
+                'harga_barang' => $item['price'],
+                'user_id' => $item['name'],
+                'tanggal' => $item['tanggal']
+            );
+            $this->user_m->insert($data);
+        }
+
+        $keranjang = array(
+            'id_usr' => $id_x,
+            'user' => $item['name'],
+            'status' => '3',
+            'tanggal' => $item['tanggal']
+        );
+        $this->user_m->insert_result($keranjang);
+        $this->cart->destroy();
+        redirect('user/status');
     }
-    public function hapus_suratizin($id_surat_izin)
-    {
-        $this->db->where('id_surat_izin', $id_surat_izin);
-        $this->db->delete('surat_izin');
-        return redirect('user/surat_izin');
-    }
+
+
     public function proses_edit_akun($id_akun)
     {
         $data = array(
@@ -100,441 +185,71 @@ class User extends CI_Controller
         $this->db->update('akun', $data);
         return redirect('user/data_pengguna');
     }
-    public function ubah_admin($id_akun)
+    public function order($id_barang)
     {
-        $data = array(
-            'level' => "admin",
+        $data['judul'] = 'View Order';
+        $data['data'] = $this->user_m->getDataBarangById($id_barang);
+        $data['keranjang'] = $this->cart->contents();
+        $data['nama'] = $this->session->userdata('nama');
+        $this->load->view('template_user/header', $data);
+        $this->load->view('user/view_order', $data);
+        $this->load->view('template_user/footer');
+    }
 
+    public function ProsesOrder($id_barang)
+    {
+        $data_barang = array(
+            'id' => $id_barang,
+            'price' => $this->input->post('harga'),
+            'item' => $this->input->post('nama_barang'),
+            'name' => $this->session->userdata('nama'),
+            'qty' => $this->input->post('jumlah_stok'),
+            // 'bidang' => $this->session->userdata('bidang'),
+            // 'satuan' =>  $this->input->post('satuan'),
+            'tanggal' => date('Y-m-d')
         );
-        $this->db->where('id_akun', $id_akun);
-        $this->db->update('akun', $data);
-        return redirect('user/data_pengguna');
-    }
-    public function ubah_user($id_akun)
-    {
-        $data = array(
-            'level' => "user",
+        $this->cart->insert($data_barang);
 
-        );
-        $this->db->where('id_akun', $id_akun);
-        $this->db->update('akun', $data);
-        return redirect('user/data_pengguna');
+        var_dump($data_barang);
+        redirect('user/keranjang');
     }
-    public function surat_masuk()
+    public function hapus($rowid)
     {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratmasuk();
-        $data['bulan'] = false;
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_masuk/data_suratmasuk', $data);
-        $this->load->view('template_user/footer');
+        if ($rowid == "semua") {
+            $this->cart->destroy();
+        } else {
+            $data = array(
+                'rowid' => $rowid,
+                'qty' => 0
+            );
+            $this->cart->update($data);
+        }
+        redirect('user/keranjang');
     }
-    public function cetak_surat_masuk()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratmasuk();
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_masuk/cetak_data_suratmasuk', $data);
-        // $this->load->view('template/footer');
-    }
-    public function cetak_surat_masuk_bulan()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $bulan = $this->input->post('bulan');
-        $data['data'] = $this->admin_m->get_all_suratmasuk_bulan($bulan);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_masuk/cetak_data_suratmasuk', $data);
-        // $this->load->view('template/footer');
-    }
-    public function caritanggal_sm()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $bulan = $this->input->post('bulan');
-        $data['bulan'] = $this->input->post('bulan');
-        $data['data'] = $this->admin_m->get_all_suratmasuk_bulan($bulan);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_masuk/data_suratmasuk', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function caritanggal_sk()
-    {
-        $data['judul'] = 'Admin';
-        $data['nama'] = $this->session->userdata('nama');
-        $bulan = $this->input->post('bulan');
-        $data['bulan'] = $this->input->post('bulan');
-        $data['data'] = $this->admin_m->get_all_suratkeluar_bulan($bulan);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_keluar/data_suratkeluar', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function data_disposisi()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_disposisi();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/disposisi/data_disposisi', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function tambah_disposisi()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/disposisi/input_disposisi', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function edit_disposisi($id_disposisi)
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_row_disposisi($id_disposisi);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/disposisi/edit_disposisi', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function proses_tambah_disposisi()
-    {
-        $data = array(
-            'nama_disposisi' => $this->input->post('nama_disposisi'),
 
-        );
 
-        $this->db->insert('disposisi', $data);
-        return redirect('user/data_disposisi');
-    }
-    public function proses_edit_disposisi($id_disposisi)
+    public function status()
     {
-        $data = array(
-            'nama_disposisi' => $this->input->post('nama_disposisi'),
-
-        );
-        $this->db->where('id_disposisi', $id_disposisi);
-        $this->db->update('disposisi', $data);
-        return redirect('user/data_disposisi');
-    }
-    public function hapus_disposisi($id_disposisi)
-    {
-        $this->db->where('id_disposisi', $id_disposisi);
-        $this->db->delete('disposisi');
-        return redirect('user/data_disposisi');
-    }
-    public function hapus_suratmasuk($id_surat_masuk)
-    {
-        $this->db->where('id_surat_masuk', $id_surat_masuk);
-        $this->db->delete('surat_masuk');
-        return redirect('user/surat_masuk');
-    }
-    public function tambah_surat_masuk()
-    {
-        $data['judul'] = 'User';
+        $data['judul'] = 'Status Order';
         $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratmasuk();
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
+        $id_usr = $this->session->userdata('id_akun');
+        $data['data'] = $this->user_m->status($id_usr);
+        $data['keranjang'] = $this->cart->contents();
         $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_masuk/input_suratmasuk', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function edit_suratmasuk($id_surat_masuk)
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_row_suratmasuk($id_surat_masuk);
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_masuk/edit_suratmasuk', $data);
+        $this->load->view('user/status', $data);
         $this->load->view('template_user/footer');
     }
 
-    public function proses_surat_masuk()
+    public function keranjang()
     {
-        $config['upload_path']   = './assets/file/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
-        $config['remove_space'] = TRUE;
-        //$config['max_size']      = 100; 
-        //$config['max_width']     = 1024; 
-        //$config['max_height']    = 768;  
+        $data['judul'] = 'View Order';
 
-        $this->load->library('upload', $config);
-        // script upload file 1
-        $this->upload->do_upload('file_surat');
-        $x = $this->upload->data();
-
-        $data = array(
-            'nama_surat' => $this->input->post('nama_surat'),
-            'no_surat' => $this->input->post('no_surat'),
-            'tgl_s_masuk' => $this->input->post('tgl_s_masuk'),
-            'tgl_t_sm'            => $this->input->post('tgl_t_sm'),
-            'asal_surat_masuk'  => $this->input->post('asal_surat_masuk'),
-            'perihal' => $this->input->post('perihal'),
-            'file_surat' => $x["orig_name"],
-            'disposisi' => $this->input->post('disposisi'),
-            'bulan_smasuk' => substr($this->input->post('tgl_t_sm'), 5, 2),
-        );
-        $this->db->insert('surat_masuk', $data);
-        return redirect('user/surat_masuk');
-    }
-    public function proses_edit_surat_masuk($id_surat_masuk)
-    {
-        $config['upload_path']   = './assets/file/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
-        $config['remove_space'] = TRUE;
-        //$config['max_size']      = 100; 
-        //$config['max_width']     = 1024; 
-        //$config['max_height']    = 768;  
-
-        $this->load->library('upload', $config);
-        // script upload file 1
-        $this->upload->do_upload('foto');
-        $x = $this->upload->data();
-
-        $data = array(
-            'nama_surat' => $this->input->post('nama_surat'),
-            'no_surat' => $this->input->post('no_surat'),
-            'tgl_s_masuk' => $this->input->post('tgl_s_masuk'),
-            'tgl_t_sm'            => $this->input->post('tgl_t_sm'),
-            'asal_surat_masuk'  => $this->input->post('asal_surat_masuk'),
-            'perihal' => $this->input->post('perihal'),
-            'file_surat' => $x["orig_name"],
-            'disposisi' => $this->input->post('disposisi'),
-            'bulan_smasuk' => substr($this->input->post('tgl_t_sm'), 5, 2),
-        );
-        $this->db->where('id_surat_masuk', $id_surat_masuk);
-        $this->db->update('surat_masuk', $data);
-        return redirect('user/surat_masuk');
-    }
-    public function proses_surat_keluar()
-    {
-        $config['upload_path']   = './assets/file/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
-        $config['remove_space'] = TRUE;
-        //$config['max_size']      = 100; 
-        //$config['max_width']     = 1024; 
-        //$config['max_height']    = 768;  
-
-        $this->load->library('upload', $config);
-        // script upload file 1
-        $this->upload->do_upload('file_surat');
-        $x = $this->upload->data();
-
-        $data = array(
-            'tanggal_surat' => $this->input->post('tanggal_surat'),
-            'tujuan_surat' => $this->input->post('tujuan_surat'),
-            'nomor_surat' => $this->input->post('no_surat'),
-            'perihal' => $this->input->post('perihal'),
-            'file_surat' => $x["orig_name"],
-            'bulan_skeluar' => substr($this->input->post('tanggal_surat'), 5, 2),
-        );
-        $this->db->insert('surat_keluar', $data);
-        return redirect('user/surat_keluar');
-    }
-
-    // 
-    public function cetak_surat_keluar()
-    {
-        $data['judul'] = 'User';
         $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratkeluar();
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_keluar/cetak_data_suratkeluar', $data);
-        // $this->load->view('template/footer');
-    }
-    public function cetak_surat_keluar_bulan()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $bulan = $this->input->post('bulan');
-        $data['data'] = $this->admin_m->get_all_suratkeluar_bulan($bulan);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_keluar/cetak_data_suratkeluar', $data);
-        // $this->load->view('template/footer');
-    }
-    // 
+        $data['keranjang'] = $this->cart->contents();
 
-    public function surat_keluar()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratkeluar();
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
-        $data['bulan'] = false;
         $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_keluar/data_suratkeluar', $data);
+        $this->load->view('user/keranjang', $data);
         $this->load->view('template_user/footer');
-    }
-    public function tambah_surat_keluar()
-    {
-
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratkeluar();
-        $data['no_surat'] = $this->admin_m->no_surat();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_keluar/input_suratkeluar', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function disposisi()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratmasuk();
-        $data['id_disposisi'] = false;
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_disposisi/surat_disposisi', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function cetak_disposisi($id_surat_masuk)
-    {
-        $data['judul'] = 'Admin';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->isi_dispo($id_surat_masuk);
-        $data['data2'] = $this->admin_m->get_row_suratmasuk($id_surat_masuk);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_disposisi/cetak_data_disposisi', $data);
-        // $this->load->view('template/footer');
-    }
-    public function cetak_disposisi_bagian()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        // $data['data'] = $this->admin_m->get_all_suratmasuk();
-        $id_disposisi = $this->input->post('id_disposisi');
-
-        $data['data'] = $this->admin_m->get_all_suratmasuk_disposisi($id_disposisi);
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_disposisi/cetak_data_disposisi', $data);
-        // $this->load->view('template/footer');
-    }
-    public function disposisi_cari()
-    {
-        $id_disposisi = $this->input->post('disposisi');
-        $data['id_disposisi'] = $this->input->post('disposisi');
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_suratmasuk_disposisi($id_disposisi);
-        $data['disposisi'] = $this->admin_m->get_all_disposisi();
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_disposisi/surat_disposisi', $data);
-        $this->load->view('template_user/footer');
-    }
-
-    public function surat_izin()
-    {
-        $data['judul'] = 'user';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_surat_izin();
-        $data['bulan'] = false;
-        $data['keperluan'] = false;
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_izin/data_suratizin', $data);
-        $this->load->view('template_user/footer');
-    }
-
-    public function tambah_surat_izin()
-    {
-        $data['judul'] = 'user';
-        $data['nama'] = $this->session->userdata('nama');
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_izin/input_suratizin', $data);
-        $this->load->view('template_user/footer');
-    }
-
-    public function proses_surat_izin()
-    {
-        $data = array(
-            'keperluan' => $this->input->post('keperluan'),
-            'dari_tanggal' => $this->input->post('dari_tanggal'),
-            'sampai_tanggal' => $this->input->post('sampai_tanggal'),
-            'akun_izin' => $this->session->userdata('id_akun'),
-            'bulan_si' => substr($this->input->post('dari_tanggal'), 5, 2),
-        );
-        $this->db->insert('surat_izin', $data);
-        return redirect('user/surat_izin');
-    }
-
-    public function cetak_surat_izin()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_surat_izin();
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_izin/cetak_data_suratizin', $data);
-        // $this->load->view('template/footer');
-    }
-    public function cetak_surat_izin_keperluan()
-    {
-        $data['judul'] = 'User';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->get_all_surat_izin();
-        $keperluan = $this->input->post('keperluan');
-        $bulan = $this->input->post('bulan');
-        $data['bulan'] = $this->input->post('bulan');
-        $data['keperluan'] = $this->input->post('keperluan');
-        $data['data'] = $this->admin_m->get_all_surat_izin_k($bulan, $keperluan);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_izin/cetak_data_suratizin', $data);
-        // $this->load->view('template/footer');
-    }
-    public function cari_surat_izin()
-    {
-        $data['judul'] = 'user';
-        $data['nama'] = $this->session->userdata('nama');
-        $keperluan = $this->input->post('keperluan');
-        $bulan = $this->input->post('bulan');
-        $data['bulan'] = $this->input->post('bulan');
-        $data['keperluan'] = $this->input->post('keperluan');
-        $data['data'] = $this->admin_m->get_all_surat_izin_k($bulan, $keperluan);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_izin/data_suratizin', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function dispo($id_surat_masuk)
-    {
-        $data['judul'] = 'Admin';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->isi_dispo($id_surat_masuk);
-        $data['data2'] = $this->admin_m->get_row_suratmasuk($id_surat_masuk);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/surat_disposisi/isi_dispo', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function cetak_surat_izin_sendiri($id_surat_izin)
-    {
-
-        $data['judul'] = 'user';
-        $data['nama'] = $this->session->userdata('nama');
-
-        $data['data'] = $this->admin_m->get_all_surat_izin_s($id_surat_izin);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/surat_izin/cetak_suratizin_sendiri', $data);
-        // $this->load->view('template/footer');
-    }
-
-    public function agenda()
-    {
-        $data['judul'] = 'Admin';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->agenda();
-        // $data['data2'] = $this->admin_m->get_row_suratmasuk($id_surat_masuk);
-        $this->load->view('template_user/header', $data);
-        $this->load->view('user/agenda/agenda', $data);
-        $this->load->view('template_user/footer');
-    }
-    public function cetak_agenda()
-    {
-        $data['judul'] = 'Admin';
-        $data['nama'] = $this->session->userdata('nama');
-        $data['data'] = $this->admin_m->agenda();
-        // $data['data2'] = $this->admin_m->get_row_suratmasuk($id_surat_masuk);
-        // $this->load->view('template/header', $data);
-        $this->load->view('user/agenda/cetak_agenda', $data);
-        // $this->load->view('template/footer');
     }
 }
 

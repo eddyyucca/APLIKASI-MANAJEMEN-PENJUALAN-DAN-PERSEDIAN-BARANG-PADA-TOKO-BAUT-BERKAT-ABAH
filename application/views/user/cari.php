@@ -2,7 +2,7 @@
     <!-- Page Heading -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="<?= base_url('user') ?>"><i class="fas fa-arrow-circle-left"> Kembali</i></a>
+            <h6 class="m-0 font-weight-bold ">Barang Alat Tulis Kantor</h6>
         </div>
         <div class="card">
             <div class="card-body">
@@ -14,14 +14,13 @@
                         </form>
                         <!-- item -->
                         <div class="row">
-                            <?php foreach ($data->result() as $x) : ?>
-                                <div class="col-md-4 col-lg-4 mb-2">
+                            <?php foreach ($databarang as $x) : ?>
+                                <div class="col-md-4 col-lg-4 mb-5">
                                     <div class="card">
-                                        <div class="card-header"><?= $x->nama_barang; ?></div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="card-text"> Jumlah Barang : <?= $x->jumlah_stok; ?></p>
+                                                    <p class="card-text"> Satuan : <?= $x->nama_barang; ?></p>
                                                 </div>
                                                 <div class="col-md-6 text-right">
                                                     <a href="<?= base_url('user/order/' . $x->id_barang); ?>" class="btn pull-right btn-primary">Order</a>
@@ -35,8 +34,8 @@
                         </div>
                         <div class="row">
                             <div class="col">
+                                <!--Tampilkan pagination-->
 
-                                <?php echo $pagination; ?>
                             </div>
                         </div>
                         <hr>
