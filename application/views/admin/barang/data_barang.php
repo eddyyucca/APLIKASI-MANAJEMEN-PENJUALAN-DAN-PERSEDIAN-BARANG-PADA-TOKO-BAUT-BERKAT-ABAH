@@ -34,7 +34,7 @@
                                 <td><?= $x->lokasi; ?></td>
                                 <td align="center">
                                     <a href="<?= base_url('admin/hapus_barang/') . $x->id_barang; ?>" onclick="return confirm('Yakin Hapus?')" class="btn btn-danger">Hapus</a>
-                                    <a href="<?= base_url('admin/edit_akun/') . $x->id_barang; ?>" class="btn btn-primary">Edit</a>
+                                    <a href="<?= base_url('admin/edit_barang/') . $x->id_barang; ?>" class="btn btn-primary">Edit</a>
                                     <a href="<?= base_url('admin/rekap_barang_masuk_item/') . $x->id_barang; ?>" class="btn btn-primary">Rekap Barang Masuk</a>
                                 </td>
                             </tr>

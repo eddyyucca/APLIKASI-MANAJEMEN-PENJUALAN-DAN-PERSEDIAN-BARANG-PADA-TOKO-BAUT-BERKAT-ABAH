@@ -89,6 +89,16 @@ class Admin extends CI_Controller
         $this->load->view('admin/barang/tambah_stok_barang', $data);
         $this->load->view('template/footer');
     }
+    public function edit_barang($id_barang)
+    {
+        $data['judul'] = 'Admin';
+        $data['nama'] = $this->session->userdata('nama');
+        $data['data'] = $this->admin_m->get_row_barang($id_barang);
+
+        $this->load->view('template/header', $data);
+        $this->load->view('admin/barang/edit_barang', $data);
+        $this->load->view('template/footer');
+    }
     public function edit_akun($id_akun)
     {
         $data['judul'] = 'Admin';
@@ -111,6 +121,21 @@ class Admin extends CI_Controller
         );
 
         $this->db->insert('data_barang', $data);
+        return redirect('admin/data_baut');
+    }
+    public function proses_edit_barang($id_barang)
+    {
+        $data = array(
+            'nama_barang' => $this->input->post('nama_barang'),
+            'lokasi' => $this->input->post('lokasi'),
+            'harga' => $this->input->post('harga'),
+
+
+        );
+
+        $this->db->where('id_barang', $id_barang);
+
+        $update = $this->db->update('data_barang', $data);
         return redirect('admin/data_baut');
     }
     public function proses_update_stok_barang($id_barang)

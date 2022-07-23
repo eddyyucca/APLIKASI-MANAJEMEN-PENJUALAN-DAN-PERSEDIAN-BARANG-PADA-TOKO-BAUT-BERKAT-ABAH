@@ -78,7 +78,7 @@ class Order_model extends CI_Model
 
     public function delkeranjang($id)
     {
-        $this->db->where('id_peg', $id);
+        $this->db->where('id_usr', $id);
         $this->db->delete('order_status');
     }
 

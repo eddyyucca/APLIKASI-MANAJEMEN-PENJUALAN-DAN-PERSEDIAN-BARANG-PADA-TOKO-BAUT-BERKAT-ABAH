@@ -11,18 +11,18 @@ class Order extends CI_Controller
         $this->load->model('order_model');
         $this->load->model('akun_model');
         ini_set('date.timezone', 'Asia/Kuala_Lumpur');
-        $level_akun = $this->session->userdata('level');
-        if ($level_akun != ("admin") <= ("kepala_gs")) {
-            redirect('auth');
-        } elseif ($level_akun == "hr_admin") {
-            redirect('hr');
-        } elseif ($level_akun == "admin_dep") {
-            redirect('auth');
-        } elseif ($level_akun == "vendor") {
-            redirect('auth');
-        } elseif ($level_akun == "pos") {
-            redirect('auth');
-        }
+        // $level_akun = $this->session->userdata('level');
+        // if ($level_akun != ("admin") <= ("kepala_gs")) {
+        //     redirect('auth');
+        // } elseif ($level_akun == "hr_admin") {
+        //     redirect('hr');
+        // } elseif ($level_akun == "admin_dep") {
+        //     redirect('auth');
+        // } elseif ($level_akun == "vendor") {
+        //     redirect('auth');
+        // } elseif ($level_akun == "pos") {
+        //     redirect('auth');
+        // }
     }
 
     public function index()
@@ -59,7 +59,7 @@ class Order extends CI_Controller
     {
         $this->order_model->delorder($id);
         $this->order_model->delkeranjang($id);
-        redirect('order');
+        redirect('admin');
     }
 
     public function order_selesai()
