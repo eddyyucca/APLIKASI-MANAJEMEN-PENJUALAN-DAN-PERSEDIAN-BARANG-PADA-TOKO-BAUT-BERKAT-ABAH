@@ -37,6 +37,28 @@ class Order_barang extends CI_Controller
         $this->load->view('order_barang/order_masuk', $data);
         $this->load->view('template/footer');
     }
+    public function order_selesai()
+    {
+        $data['judul'] = 'Order Selesai';
+        $data['alerts_3'] = $this->order_model->alerts_3();
+        $data['level_akun'] = $this->session->userdata('level');
+        $data['data'] = $this->order_model->diterima();
+        $data['nama'] = $this->session->userdata('nama');
+        $this->load->view('template/header', $data);
+        $this->load->view('order_barang/order_masuk', $data);
+        $this->load->view('template/footer');
+    }
+    public function order_ditolak()
+    {
+        $data['judul'] = 'Order Ditolak';
+        $data['alerts_3'] = $this->order_model->alerts_3();
+        $data['level_akun'] = $this->session->userdata('level');
+        $data['data'] = $this->order_model->ditolak();
+        $data['nama'] = $this->session->userdata('nama');
+        $this->load->view('template/header', $data);
+        $this->load->view('order_barang/order_masuk', $data);
+        $this->load->view('template/footer');
+    }
 
     public function view($id)
     {

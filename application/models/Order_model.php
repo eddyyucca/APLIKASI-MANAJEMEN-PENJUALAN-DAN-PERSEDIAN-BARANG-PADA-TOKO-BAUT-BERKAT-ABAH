@@ -117,6 +117,26 @@ class Order_model extends CI_Model
 
         return $query->result();
     }
+    public function ditolak()
+    {
+        $this->db->select('*');
+        $this->db->from('order_status');
+        // $this->db->join('akun', 'akun.id_akun = order_status.id_bidang');
+        $this->db->where('status', 4);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    public function diterima()
+    {
+        $this->db->select('*');
+        $this->db->from('order_status');
+        // $this->db->join('akun', 'akun.id_akun = order_status.id_bidang');
+        $this->db->where('status', 2);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 
     public function status($id)
     {
@@ -146,10 +166,6 @@ class Order_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
-
-
-
-
 }
 
 /* End of file Order_model.php */
