@@ -61,7 +61,7 @@ class User extends CI_Controller
         //end
 
 
-        $data['judul'] = 'Tabel Data ATK';
+        $data['judul'] = 'Data';
         $data['databarang'] = $this->user_m->get_barang();
         $data['keranjang'] = $this->cart->contents();
         $data['nama'] = $this->session->userdata('nama');

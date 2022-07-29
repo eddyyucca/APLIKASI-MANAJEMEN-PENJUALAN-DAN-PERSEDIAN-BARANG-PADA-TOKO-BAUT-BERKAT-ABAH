@@ -174,12 +174,20 @@ class Order_barang extends CI_Controller
         ));
         $results = json_decode(curl_exec($curlHandle), true);
         curl_close($curlHandle);
-        $data1 = array(
-            'status' => 2,
+        $x = $this->order_model->where($id);
 
-        );
+        foreach ($x as $xx) {
+            $id_k = $xx->id;
+            $nilai1 = $xx->qty;
+            $nilai2 = $xx->qty_order;
+            $hasil = $nilai1 - $nilai2;
+            $data = array(
+                'qty' => $hasil
+            );
+            $update = $this->order_model->update_qty($data, $id_k);
+        }
         $data2 = array(
-            'jumlah_stok' => 2,
+            'status' => 2,
 
         );
 

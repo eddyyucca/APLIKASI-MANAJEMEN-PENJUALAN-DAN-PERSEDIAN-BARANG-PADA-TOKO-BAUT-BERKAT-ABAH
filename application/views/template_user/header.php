@@ -55,7 +55,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- Nav Item - Utilities Collapse Menu -->
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-database"></i>
             <span>Laporan Pembelian</span>
@@ -66,7 +66,7 @@
 
             </div>
           </div>
-        </li>
+        </li> -->
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
         <li class="nav-item">
