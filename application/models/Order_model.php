@@ -65,7 +65,7 @@ class Order_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('data_order');
-        $this->db->join('data_barang', 'data_barang.id = data_order.id_barang');
+        $this->db->join('data_barang', 'data_barang.id_barang = data_order.id_barang');
         $this->db->where('id_keranjang', $id);
         return $this->db->get()->result();
     }
@@ -90,7 +90,7 @@ class Order_model extends CI_Model
 
     public function update_qty($data, $id_k)
     {
-        $this->db->where('id', $id_k);
+        $this->db->where('id_barang', $id_k);
         $this->db->update('data_barang', $data);
     }
 

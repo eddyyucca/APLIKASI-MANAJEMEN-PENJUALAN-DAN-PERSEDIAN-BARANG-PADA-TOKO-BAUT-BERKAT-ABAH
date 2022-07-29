@@ -177,12 +177,12 @@ class Order_barang extends CI_Controller
         $x = $this->order_model->where($id);
 
         foreach ($x as $xx) {
-            $id_k = $xx->id;
+            $id_k = $xx->id_barang;
             $nilai1 = $xx->qty;
             $nilai2 = $xx->qty_order;
             $hasil = $nilai1 - $nilai2;
             $data = array(
-                'qty' => $hasil
+                'jumlah_stok' => $hasil
             );
             $update = $this->order_model->update_qty($data, $id_k);
         }
