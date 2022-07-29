@@ -13,6 +13,7 @@
                             <th>Nama</th>
                             <th>Stok Masuk</th>
                             <th>Date</th>
+                            <th>Waktu</th>
 
                         </tr>
                     </thead>
@@ -25,6 +26,7 @@
                                 <td><?= $x->nama_barang; ?></td>
                                 <td><?= $x->stok_masuk; ?></td>
                                 <td><?= $x->date; ?></td>
+                                <td><?= $x->waktu; ?></td>
 
                             </tr>
                         <?php } ?>

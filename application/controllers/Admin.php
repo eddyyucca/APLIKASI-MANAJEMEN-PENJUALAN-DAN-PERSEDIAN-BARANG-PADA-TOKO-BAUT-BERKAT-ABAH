@@ -148,6 +148,7 @@ class Admin extends CI_Controller
             'barang' => $id_barang,
             'stok_masuk' => $stok_masuk,
             'date' => $this->input->post('date'),
+            'waktu' => date('H:i:s a'),
 
 
         );
