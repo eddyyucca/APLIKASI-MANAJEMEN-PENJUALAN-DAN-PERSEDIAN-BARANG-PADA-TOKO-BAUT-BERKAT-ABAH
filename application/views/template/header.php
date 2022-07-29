@@ -88,7 +88,7 @@
           </a>
           <div id="laporan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="<?= base_url('admin/surat_masuk') ?>">Laporan Barang Masuk</a>
+              <a class="collapse-item" href="<?= base_url('admin/laporan_bm') ?>">Laporan Barang Masuk</a>
             </div>
           </div>
         </li>

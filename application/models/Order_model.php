@@ -111,7 +111,7 @@ class Order_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('order_status');
-        // $this->db->join('akun', 'akun.id_akun = order_status.id_bidang');
+        $this->db->join('akun', 'akun.username = order_status.user');
         $this->db->where('status', 3);
         $query = $this->db->get();
 
@@ -121,7 +121,7 @@ class Order_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('order_status');
-        // $this->db->join('akun', 'akun.id_akun = order_status.id_bidang');
+        $this->db->join('akun', 'akun.username = order_status.user');
         $this->db->where('status', 4);
         $query = $this->db->get();
 
@@ -131,7 +131,7 @@ class Order_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('order_status');
-        // $this->db->join('akun', 'akun.id_akun = order_status.id_bidang');
+        $this->db->join('akun', 'akun.username = order_status.user');
         $this->db->where('status', 2);
         $query = $this->db->get();
 

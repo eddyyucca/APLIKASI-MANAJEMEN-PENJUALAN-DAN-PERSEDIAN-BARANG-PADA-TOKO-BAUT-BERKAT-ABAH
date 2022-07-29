@@ -2,14 +2,14 @@
     <!-- Page Heading -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold ">Data Baut</h6>
+            <h6 class="m-0 font-weight-bold ">Laporan Semua Barang Masuk</h6>
         </div>
         <div class="card-body">
-            <div class="container">
-                <a href="<?= base_url('admin/cetak_rekap_barang_masuk_item/' . $id) ?>" class="btn btn-primary">Cetak PDF</a>
-                <hr>
-            </div>
             <div class="table-responsive">
+                <div class="container">
+                    <a href="<?= base_url('admin/cetak_laporan_bm') ?>" class="btn btn-primary">Cetak PDF</a>
+                    <hr>
+                </div>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -40,4 +40,3 @@
         </div>
     </div>
 </div>
-

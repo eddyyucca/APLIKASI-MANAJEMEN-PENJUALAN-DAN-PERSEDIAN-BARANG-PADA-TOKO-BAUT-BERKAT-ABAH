@@ -24,13 +24,14 @@
                                         </thead>
                                         <tbody>
                                             <?php
+
                                             if ($data3->status == "2") {
                                                 $no = 1;
                                                 if ($data == false) { ?>
                                                     <td colspan='5' align='center'>Data Kosong</td>
                                                     <?php
-                                                        } else {
-                                                            foreach ($data as $x) { ?>
+                                                } else {
+                                                    foreach ($data as $x) { ?>
                                                         <tr>
                                                             <td><?= $no++; ?></td>
                                                             <td><?= $x->item ?></td>
@@ -50,7 +51,7 @@
                                             <a href="" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#selesai">Selesai</a>
                                         </td>
                                     <?php }
-                                    } elseif ($data3->status == "1") { ?>
+                                            } elseif ($data3->status == "1") { ?>
                                     <td colspan='5' align='center'>Data Kosong</td>
                                 <?php  } elseif ($data3->status == "3") { ?>
                                     <td colspan='5' align='center'>Data Kosong</td>
@@ -87,7 +88,7 @@
                 <?php $no = 1;
                 foreach ($data as $k) :
                     if ($no++ > 1) break;
-                    ?>
+                ?>
 
                     <a href="<?= base_url('order/selesai/') . $k->id_keranjang ?>" class="btn btn-primary">Selesai</a>
                 <?php endforeach; ?>

@@ -19,6 +19,7 @@
                                                 <th>User</th>
                                                 <!-- <th>Alamat</th> -->
                                                 <th>Tanggal</th>
+                                                <th>Alamat Tujuan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -31,6 +32,7 @@
                                                     <td><?= $x->user; ?></td>
                                                     <!-- nanti tambah id -->
                                                     <td><?= $x->tanggal; ?></td>
+                                                    <td><?= $x->alamat; ?></td>
                                                     <td align="center">
                                                         <a href="<?= base_url('order_barang/view/') . $x->id_usr ?>" class="btn btn-primary">View</a>
                                                         <a href="<?= base_url('order/hapusorder/') . $x->id_usr ?>" onclick="return confirm('Yakin Hapus?')" class="btn btn-danger">Hapus</a>

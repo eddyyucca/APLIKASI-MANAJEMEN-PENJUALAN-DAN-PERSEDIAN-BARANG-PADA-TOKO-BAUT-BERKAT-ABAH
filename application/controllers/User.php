@@ -12,6 +12,7 @@ class User extends CI_Controller
         $this->load->library('cart');
         $this->load->model('admin_m');
         $this->load->model('user_m');
+        $this->load->model('akun_model');
 
         // $level_akun = $this->session->userdata('level');
         // if ($level_akun != "user") {
@@ -121,27 +122,33 @@ class User extends CI_Controller
 
     public function insert()
     {
-        $userkey = 'f70595dcb94f';
-        $passkey = 'da5d1066b8f2e8343646fb16';
-        $telepon = '081250653005';
-        $message = 'Ada order baru, silahkan cek dan lakukan proses order';
-        $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $url);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curlHandle, CURLOPT_POST, 1);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
-            'userkey' => $userkey,
-            'passkey' => $passkey,
-            'to' => $telepon,
-            'message' => $message
-        ));
-        $results = json_decode(curl_exec($curlHandle), true);
-        curl_close($curlHandle);
+
+        $admin = $this->akun_model->getadmin();
+        foreach ($admin as $x) {
+
+
+            $userkey = 'f70595dcb94f';
+            $passkey = 'da5d1066b8f2e8343646fb16';
+            $telepon = $x->telpon;
+            $message = 'Ada order baru, silahkan cek dan lakukan proses order';
+            $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curlHandle, CURLOPT_POST, 1);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                'userkey' => $userkey,
+                'passkey' => $passkey,
+                'to' => $telepon,
+                'message' => $message
+            ));
+            $results = json_decode(curl_exec($curlHandle), true);
+            curl_close($curlHandle);
+        }
 
         $x = $this->db->get('data_order')->result();
         $id_x = count($x) + 1;

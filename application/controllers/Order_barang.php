@@ -75,6 +75,21 @@ class Order_barang extends CI_Controller
         $this->load->view('order_barang/view', $data);
         $this->load->view('template/footer');
     }
+    public function view2($id)
+    {
+        $data['judul'] = 'Order Persetujuan';
+        $data['alerts_3'] = $this->order_model->alerts_3();
+        $data['level_akun'] = $this->session->userdata('level');
+        $data['data'] = $this->order_model->alerts_3();
+        $data['data2'] = $this->super_model->where($id);
+        $data['data3'] = $this->super_model->ket($id);
+        $data['data4'] = $this->super_model->status($id);
+        $data['nama'] = $this->session->userdata('nama_user');
+
+        $this->load->view('template/header', $data);
+        $this->load->view('order_barang/view2', $data);
+        $this->load->view('template/footer');
+    }
 
     public function edit($id)
     {
@@ -136,11 +151,35 @@ class Order_barang extends CI_Controller
         redirect('order_barang/view/' . $id_redirect);
     }
 
-    public function diterima($id)
+    public function diterima($id, $telpon)
     {
-
-        $data2 = array(
+        $userkey = 'f70595dcb94f';
+        $passkey = 'da5d1066b8f2e8343646fb16';
+        $telepon = $telpon;
+        $message = 'Orderan anda sudah di proses toko baut barakat abah, barang akan tiba di tempat anda';
+        $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curlHandle, CURLOPT_POST, 1);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+            'userkey' => $userkey,
+            'passkey' => $passkey,
+            'to' => $telepon,
+            'message' => $message
+        ));
+        $results = json_decode(curl_exec($curlHandle), true);
+        curl_close($curlHandle);
+        $data1 = array(
             'status' => 2,
+
+        );
+        $data2 = array(
+            'jumlah_stok' => 2,
 
         );
 
@@ -148,8 +187,29 @@ class Order_barang extends CI_Controller
         redirect('order_barang/order_persetujuan');
     }
 
-    public function ditolak($id)
+    public function ditolak($id, $telpon)
     {
+        $userkey = 'f70595dcb94f';
+        $passkey = 'da5d1066b8f2e8343646fb16';
+        $telepon = $telpon;
+        $message = 'Orderan anda ditolak karna terjadi kesalahan,silahkan hubungi admin toko baut barakat abah';
+        $url = 'https://console.zenziva.net/wareguler/api/sendWA/';
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curlHandle, CURLOPT_POST, 1);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+            'userkey' => $userkey,
+            'passkey' => $passkey,
+            'to' => $telepon,
+            'message' => $message
+        ));
+        $results = json_decode(curl_exec($curlHandle), true);
+        curl_close($curlHandle);
         $data2 = array(
             'status' => 4,
         );

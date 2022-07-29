@@ -26,6 +26,7 @@ class Super_model extends CI_Model
         $this->db->select('*');
         $this->db->from('data_order');
         $this->db->join('data_barang', 'data_barang.id_barang = data_order.id_barang');
+        $this->db->join('akun', 'akun.username = data_order.user_id');
         $this->db->where('id_keranjang', $id);
         return $this->db->get()->result();
     }
@@ -70,8 +71,13 @@ class Super_model extends CI_Model
 
     public function status($id)
     {
+        $this->db->select('*');
+        $this->db->from('order_status');
+        $this->db->join('akun', 'akun.username = order_status.user');
+
         $this->db->where('id_usr', $id);
-        $x = $this->db->get('order_status');
+        // $this->db->join('akun', 'akun.username = order_status.user');
+        $x = $this->db->get();
         return $x->row();
     }
 }

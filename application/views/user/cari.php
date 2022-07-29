@@ -2,7 +2,7 @@
     <!-- Page Heading -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold ">Barang Alat Tulis Kantor</h6>
+            <h6 class="m-0 font-weight-bold ">Toko Baut</h6>
         </div>
         <div class="card">
             <div class="card-body">

@@ -24,6 +24,15 @@ class Admin_m extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+    public function laporan_bm()
+    {
+
+
+        $this->db->from('stok_masuk');
+        $this->db->join('data_barang', 'stok_masuk.barang = data_barang.id_barang');
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
 
 /* End of file alumni_m.php */

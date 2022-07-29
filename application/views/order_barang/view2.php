@@ -23,7 +23,7 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            if ($data4->status == "3") {
+                                            if ($data4->status == "2") {
 
                                                 $no = 1;
                                                 if ($data2 == false) { ?>
@@ -50,23 +50,17 @@
                                     ?>
 
 
-                                        <td colspan='6' align="center">
 
+                                    <?php endforeach; ?>
 
-                                            <a href="<?= base_url('order_barang/diterima/') . $k->id_keranjang . "/" . $x->telpon ?>"><i class="btn btn-primary"> DI Terima</i></a>
-
-                                            <a href="<?= base_url('order_barang/ditolak/') . $k->id_keranjang . "/" . $x->telpon ?>"><i class="btn btn-danger">DI Tolak</i></a>
-                                            <hr>
-                                        <?php endforeach; ?>
-                                        </td>
-                                    <?php }
+                                <?php }
                                             } elseif ($data4->status == "3") { ?>
-                                    <td colspan='5' align='center'>Data Kosong</td>
-                                <?php } elseif ($data4->status == "1") { ?>
-                                    <td colspan='5' align='center'>Data Kosong</td>
-                                <?php } elseif ($data4->status == "4") { ?>
-                                    <td colspan='5' align='center'>Data Kosong</td>
-                                <?php   } ?>
+                                <td colspan='5' align='center'>Data Kosong</td>
+                            <?php } elseif ($data4->status == "1") { ?>
+                                <td colspan='5' align='center'>Data Kosong</td>
+                            <?php } elseif ($data4->status == "4") { ?>
+                                <td colspan='5' align='center'>Data Kosong</td>
+                            <?php   } ?>
                                 </table>
                             </div>
                         </div>

@@ -24,12 +24,18 @@
                     </thead>
                     <tbody>
                         <?php
+                        function rupiah($angka)
+                        {
+
+                            $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
+                            return $hasil_rupiah;
+                        }
                         $nomor = 1;
                         foreach ($data as $x) { ?>
                             <tr>
                                 <td><?= $nomor++; ?></td>
                                 <td><?= $x->nama_barang; ?></td>
-                                <td><?= $x->harga; ?></td>
+                                <td><?= rupiah($x->harga); ?></td>
                                 <td><?= $x->jumlah_stok; ?></td>
                                 <td><?= $x->lokasi; ?></td>
                                 <td align="center">

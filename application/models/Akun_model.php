@@ -49,6 +49,14 @@ class Akun_model extends CI_Model
         $this->db->where('id', $id);
         $update = $this->db->update('user', $data);
     }
+
+    public function getadmin()
+    {
+
+        $this->db->where('level', 'admin');
+
+        return $this->db->get('akun')->result();
+    }
 }
 
 /* End of file User_model.php */
