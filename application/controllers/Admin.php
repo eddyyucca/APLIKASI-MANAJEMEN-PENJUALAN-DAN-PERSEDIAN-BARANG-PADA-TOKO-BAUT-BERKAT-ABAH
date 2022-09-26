@@ -130,6 +130,19 @@ class Admin extends CI_Controller
         $this->load->view('admin/barang/laporan_bm', $data);
         $this->load->view('template/footer');
     }
+    public function laporan_bm2()
+    {
+        $tgl1 = $this->input->post('tgl1');
+        $tgl2 = $this->input->post('tgl2');
+
+        $data['judul'] = 'Admin';
+        $data['nama'] = $this->session->userdata('nama');
+
+        $data['data'] = $this->admin_m->cari_tanggal($tgl1, $tgl2);
+        $this->load->view('template/header', $data);
+        $this->load->view('admin/barang/laporan_bm', $data);
+        $this->load->view('template/footer');
+    }
     public function cetak_laporan_bm()
     {
         $data['judul'] = 'Admin';

@@ -21,31 +21,26 @@
                                         </thead>
                                         <?php
                                         $no = 1;
-                                        if ($data == false) {
-                                            echo "<td colspan='5'  align='center'>
-                                            <h1>Data Kosong</h1>
-                                            </td>";
-                                        } else {
-                                            foreach ($data as $x) { ?>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><?= $no++; ?></td>
-                                                        <td><?= $x->tanggal; ?></td>
-                                                        <td><?php
-                                                            if ($x->status == "4") {
-                                                                echo "Ditolak";
-                                                            } elseif ($x->status == "3") {
-                                                                echo "Menunggu Disetujui";
-                                                            } elseif ($x->status == "2") {
-                                                                echo "Di Proses";
-                                                            } elseif ($x->status == "1") {
-                                                                echo "Selesai";
-                                                            }
-                                                            ?>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                        <?php }
+                                        foreach ($data as $x) { ?>
+                                            <tbody>
+                                                <tr>
+                                                    <td><?= $no++; ?></td>
+                                                    <td><?= $x->tanggal; ?></td>
+                                                    <td><?php
+                                                        if ($x->status == "4") {
+                                                            echo "Ditolak";
+                                                        } elseif ($x->status == "3") {
+                                                            echo "Menunggu Disetujui";
+                                                        } elseif ($x->status == "2") {
+                                                            echo "Di Proses";
+                                                        } elseif ($x->status == "1") {
+                                                            echo "Selesai";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        <?php
                                         } ?>
                                 </table>
                             </div>

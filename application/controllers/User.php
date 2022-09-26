@@ -19,7 +19,56 @@ class User extends CI_Controller
         //     return redirect('auth');
         // }
     }
+    public function ubah_password()
+    {
+        $data['judul'] = 'Ubah Password Pegawai';
+        $data['nama'] = $this->session->userdata('nama_lengkap');
+        $username =  $this->session->userdata('nama');
+        $data['data'] = $this->user_m->get_user($username);
+        $data['pesan'] = false;
+        $data['keranjang'] = $this->cart->contents();
+        $this->load->view('template_user/header', $data);
+        $this->load->view('user/password/ubah_password', $data);
+        $this->load->view('template_user/footer');
+    }
 
+    public function proses_ubah_password($username)
+    {
+        $password = md5($this->input->post('password_lama'));
+        $cek = $this->user_m->cek_pass($password, $username);
+
+        if ($cek == true) {
+            $data['judul'] = 'Ubah Password';
+            $data['keranjang'] = $this->cart->contents();
+            $data['nama'] = $this->session->userdata('nama_lengkap');
+            $username =  $this->session->userdata('nama');
+            $data['data'] =
+                $this->user_m->get_user($username);
+            $data['pesan'] = '<div class="alert alert-success" role="alert">Password Berhasil Diubah !
+    </div>';
+            $data_update = array(
+                "password" => md5($this->input->post('password_baru'))
+            );
+            $this->db->where('username', $username);
+            $this->db->update('akun', $data_update);
+            $data['keranjang'] = $this->cart->contents();
+            $this->load->view('template_user/header', $data);
+            $this->load->view('user/password/ubah_password', $data);
+            $this->load->view('template_user/footer');
+        } else {
+            $data['judul'] = 'Ubah Password ';
+            $data['nama'] = $this->session->userdata('nama_lengkap');
+            $data['keranjang'] = $this->cart->contents();
+            $username =  $this->session->userdata('nama');
+            $data['data'] = $this->user_m->get_user($username);
+            $data['pesan'] = '<div class="alert alert-danger" role="alert">Password Salah !
+    </div>';
+
+            $this->load->view('template_user/header', $data);
+            $this->load->view('user/password/ubah_password', $data);
+            $this->load->view('template_user/footer');
+        }
+    }
     public function index()
     {
         //page

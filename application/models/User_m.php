@@ -19,6 +19,11 @@ class User_m extends CI_Model
         $x = $this->db->get('data_barang');
         return $x->result();
     }
+    public function get_user($username)
+    {
+        $this->db->where('username', $username);
+        return $this->db->get('akun')->row();
+    }
     public function getDataBarangById($id_barang)
     {
         $this->db->where('id_barang', $id_barang);
@@ -41,5 +46,19 @@ class User_m extends CI_Model
         $this->db->where('id_usr', $id_usr);
         $x = $this->db->get('order_status');
         return $x->result();
+    }
+
+    public function cek_pass($password, $username)
+    {
+        $this->db->where('username', $username);
+        $this->db->where('password', $password);
+        $this->db->limit(1);
+        $query = $this->db->get('akun');
+
+        if ($query->num_rows() == 1) {
+            return $query->result();
+        } else {
+            return false;
+        }
     }
 }

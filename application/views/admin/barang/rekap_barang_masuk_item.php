@@ -8,6 +8,7 @@
             <div class="container">
                 <a href="<?= base_url('admin/cetak_rekap_barang_masuk_item/' . $id) ?>" class="btn btn-primary">Cetak PDF</a>
                 <hr>
+
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -40,4 +41,3 @@
         </div>
     </div>
 </div>
-
